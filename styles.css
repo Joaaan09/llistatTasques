@@ -1,0 +1,82 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #6759b7;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+main{
+    background-color: white;
+    width: 40%;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.buscador {
+    display: flex;
+    width: 100%;
+}
+
+.buscador input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #ccc;
+    border-right: none; /* elimina borde duplicado */
+    border-radius: 10px 0 0 10px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.buscador input:focus {
+    border-color: #007bff;
+}
+
+.buscador button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    border-left: none; /* elimina borde duplicado */
+    color: white;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buscador button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style: none; /* quita los puntos por defecto */
+    padding: 0;
+    margin: 20px 0;
+}
+
+ul li {
+    background-color: #f5f5f5;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+ul li:hover {
+    background-color: #e0e0ff;
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+ul li::before {
+    content: "✔️";
+    font-size: 16px;
+}
+
+
