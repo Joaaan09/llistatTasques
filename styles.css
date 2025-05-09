@@ -79,4 +79,21 @@ ul li::before {
     font-size: 16px;
 }
 
+li button{
+    background-color: #6759b7;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    
+}
+
+li button:hover {
+    background-color: #4e30b9;
+    transform: scale(1.1);
+}
+
 
