@@ -71,6 +71,15 @@ function cargarBotons(elementLi, taskId, textSpan) {
             console.error('Error al actualizar tarea:', error);
         });
     });
+
+    // EDITAR TASCA
+    editar.addEventListener("click", () =>{
+        const nouText = prompt("Modifica la tasca:");
+        ferPut(taskId, nouText, true).then(() => {
+            textSpan.textContent = nouText;
+
+        })
+    })
 }
 
 async function ferGet() {
