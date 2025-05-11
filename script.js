@@ -5,12 +5,24 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(conexioServidor, 2000); // Cada dos segons comprobará la conexió amb el servidor
     cargarTasques(); // Carguem les tasques
     afegirTasca(); // Cridem aquesta funció per estar pendents de quan es vulguir afegir una tasca
+
+
 });
 
 // Variables globals per poder controlar el estat del servidor
 let online = true;
 let tasquesLocal = JSON.parse(localStorage.getItem('tasques') || '[]');
 let pendingChanges = JSON.parse(localStorage.getItem('pendingChanges') || '[]');
+
+/**
+ * Contador de les tasques que hi han a les llistes
+ */
+function numeroTasques() {
+    const numeroTasques = document.querySelector(".numTasques");
+    const tasques = JSON.parse(localStorage.getItem('tasques') || '[]');
+    numeroTasques.textContent = `Tasques: ${tasques.length}` + " | ";
+
+}
 
 /**
  * Afegeix l'escoltador per afegir una nova tasca, gestionant tant mode online com offline.
@@ -36,12 +48,13 @@ function afegirTasca() {
                 const textSpan = document.createElement("span");
 
                 // Actualitzem el contingut html
-                textSpan.textContent = input.value;  
+                textSpan.textContent = input.value;
                 tasca.appendChild(textSpan);
                 llista.appendChild(tasca);
-                cargarBotons(tasca, novaTasca.id, textSpan); 
+                cargarBotons(tasca, novaTasca.id, textSpan);
                 input.value = '';
                 guardarLocalStorage(); // Guardem les dades en local
+                numeroTasques();
             } catch (error) {
                 console.error('Error al añadir tarea:', error);
             }
@@ -69,6 +82,8 @@ function afegirTasca() {
             tasca.appendChild(textSpan);
             llista.appendChild(tasca);
             cargarBotons(tasca, novaTasca.id, textSpan);
+            numeroTasques();
+
             input.value = '';
         }
     });
@@ -100,6 +115,8 @@ function cargarTasques() {
                 tasca.appendChild(textSpan);
                 llista.appendChild(tasca);
                 cargarBotons(tasca, task.id, textSpan);
+                numeroTasques();
+
             });
         }).catch(error => {
             console.error('Error al cargar tareas:', error);
@@ -134,6 +151,7 @@ function cargarTasquesOffline() {
         tasca.appendChild(textSpan);
         llista.appendChild(tasca);
         cargarBotons(tasca, task.id, textSpan);
+        numeroTasques();
     });
 }
 
@@ -167,6 +185,7 @@ function cargarBotons(elementLi, taskId, textSpan) {
             ferDelete(taskId).then(() => {
                 elementLi.remove();
                 guardarLocalStorage();
+                numeroTasques();
             });
         } else {
             // Mode offline
@@ -184,6 +203,7 @@ function cargarBotons(elementLi, taskId, textSpan) {
 
                 localStorage.setItem('tasques', JSON.stringify(tasquesLocal));
                 localStorage.setItem('pendingChanges', JSON.stringify(pendingChanges));
+                numeroTasques();
                 elementLi.remove();
             }
         }
@@ -198,6 +218,7 @@ function cargarBotons(elementLi, taskId, textSpan) {
             ferPut(taskId, textSpan.textContent, newCompletedState).then(() => {
                 textSpan.style.textDecoration = newCompletedState ? "line-through" : "none";
                 guardarLocalStorage();
+                numeroTasques();
             }).catch(error => {
                 console.error('Error al actualizar tarea:', error);
             });
@@ -219,6 +240,7 @@ function cargarBotons(elementLi, taskId, textSpan) {
                 localStorage.setItem('tasques', JSON.stringify(tasquesLocal));
                 localStorage.setItem('pendingChanges', JSON.stringify(pendingChanges));
                 textSpan.style.textDecoration = newCompletedState ? "line-through" : "none";
+                numeroTasques();
             }
         }
     });
@@ -267,6 +289,7 @@ function guardarLocalStorage() {
         ferGet().then(tasks => {
             localStorage.setItem('tasques', JSON.stringify(tasks));
             tasquesLocal = tasks;
+            numeroTasques();
         });
     }
 }
@@ -315,7 +338,7 @@ function conexioServidor() {
     fetch('http://localhost:3000/tasks/')
         .then(response => {
             if (response.ok) {
-                conexio.textContent = "Online";
+                conexio.textContent =" Online ✅";
                 if (!online) {
                     online = true;
                     // Quan tornem a estar online, sincronitzem canvis
@@ -326,7 +349,7 @@ function conexioServidor() {
             }
         })
         .catch(error => {
-            conexio.textContent = "Offline";
+            conexio.textContent = " Offline ❌";
             if (online) {
                 online = false;
                 // Quan passem a offline, carreguem les tasques del localStorage
