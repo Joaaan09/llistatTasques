@@ -14,7 +14,7 @@ Este es un proyecto de un listado de tareas simple utilizando Node.js, Express y
 3. Ejecuta el siguiente comando para inicializar el proyecto:
    ```bash
    npm init -y
-````
+
 
 4. Instala las dependencias necesarias:
 
@@ -30,7 +30,7 @@ Este es un proyecto de un listado de tareas simple utilizando Node.js, Express y
    ```bash
    node server.js
   php -S localhost:85
-   ```
+   ``
 
 ## Uso
 
