@@ -1,3 +1,6 @@
+/**
+ * Inicialitza l'aplicació quan el DOM està llest.
+ */
 document.addEventListener("DOMContentLoaded", () => {
     setInterval(conexioServidor, 2000); // Cada dos segons comprobará la conexió amb el servidor
     cargarTasques(); // Carguem les tasques
@@ -9,6 +12,9 @@ let online = true;
 let tasquesLocal = JSON.parse(localStorage.getItem('tasques') || '[]');
 let pendingChanges = JSON.parse(localStorage.getItem('pendingChanges') || '[]');
 
+/**
+ * Afegeix l'escoltador per afegir una nova tasca, gestionant tant mode online com offline.
+ */
 // Funció per afegir una tasca
 function afegirTasca() {
     // Elements html
@@ -68,6 +74,9 @@ function afegirTasca() {
     });
 }
 
+/**
+ * Carrega les tasques des del servidor o des de localStorage si està offline.
+ */
 // Funció per cargar les tasques 
 function cargarTasques() {
     const llista = document.querySelector(".tasques");
@@ -101,6 +110,9 @@ function cargarTasques() {
     }
 }
 
+/**
+ * Carrega les tasques des de localStorage quan estem offline.
+ */
 // Funció per cargar les tasques offline
 function cargarTasquesOffline() {
     // Elements HTML
@@ -125,6 +137,12 @@ function cargarTasquesOffline() {
     });
 }
 
+/**
+ * Afegeix els botons d'eliminar, finalitzar i editar a una tasca.
+ * @param {HTMLElement} elementLi - L'element de llista <li> de la tasca.
+ * @param {string} taskId - L'identificador de la tasca.
+ * @param {HTMLElement} textSpan - L'span que conté el text de la tasca.
+ */
 // Funció per cargar els botons finalitzar, editar i eliminar
 function cargarBotons(elementLi, taskId, textSpan) {
     // Creem els elements html i li afegim la clase i text
@@ -240,6 +258,9 @@ function cargarBotons(elementLi, taskId, textSpan) {
     });
 }
 
+/**
+ * Desa l'estat actual de les tasques al localStorage si estem online.
+ */
 // Funció per guardar les tasques en local
 function guardarLocalStorage() {
     if (online) {
@@ -250,6 +271,9 @@ function guardarLocalStorage() {
     }
 }
 
+/**
+ * Sincronitza els canvis emmagatzemats localment amb el servidor quan es recupera la connexió.
+ */
 // Funció per sincronitzar els canvis quan torna la connexió
 async function sincronitzarCanvis() {
     if (!online || pendingChanges.length === 0) return;
@@ -281,6 +305,9 @@ async function sincronitzarCanvis() {
     }
 }
 
+/**
+ * Comprova periòdicament si hi ha connexió amb el servidor i sincronitza canvis si és necessari.
+ */
 // Funció per saber si tenim connexió al servidor
 function conexioServidor() {
     let conexio = document.querySelector(".conexio");
@@ -308,6 +335,10 @@ function conexioServidor() {
         });
 }
 
+/**
+ * Fa una petició GET al servidor per obtenir totes les tasques.
+ * @returns {Promise<Array<Object>>} Llista de tasques del servidor.
+ */
 async function ferGet() {
     try {
         const resposta = await fetch('http://localhost:3000/tasks/');
@@ -320,6 +351,11 @@ async function ferGet() {
     }
 }
 
+/**
+ * Envia una nova tasca al servidor amb una petició POST.
+ * @param {string} nomTasca - El text de la nova tasca.
+ * @returns {Promise<Object>} La resposta amb la tasca creada.
+ */
 async function ferPost(nomTasca) {
     try {
         const resposta = await fetch('http://localhost:3000/tasks/', {
@@ -338,6 +374,13 @@ async function ferPost(nomTasca) {
     }
 }
 
+/**
+ * Actualitza una tasca existent al servidor amb una petició PUT.
+ * @param {string} id - L'identificador de la tasca.
+ * @param {string} nomTasca - El nou text de la tasca.
+ * @param {boolean} completada - L'estat de completada de la tasca.
+ * @returns {Promise<Object>} La resposta amb la tasca actualitzada.
+ */
 async function ferPut(id, nomTasca, completada) {
     try {
         const resposta = await fetch(`http://localhost:3000/tasks/${id}/`, {
@@ -356,6 +399,11 @@ async function ferPut(id, nomTasca, completada) {
     }
 }
 
+/**
+ * Elimina una tasca del servidor amb una petició DELETE.
+ * @param {string} id - L'identificador de la tasca a eliminar.
+ * @returns {Promise<void>} Promesa que indica quan l'eliminació ha finalitzat.
+ */
 async function ferDelete(id) {
     try {
         const resposta = await fetch(`http://localhost:3000/tasks/${id}/`, {
